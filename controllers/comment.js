@@ -8,7 +8,7 @@ exports.create = async (req, res, next) => {
 
   let post;
   try {
-    post = Post.findById(postid);
+    post = await Post.findById(postid);
   } catch (err) {
     const error = new HttpError("Could not create comment #a", 500);
     return next(error);
@@ -21,7 +21,7 @@ exports.create = async (req, res, next) => {
 
   let creator;
   try {
-    creator = User.findById(req.userId);
+    creator = await User.findById(req.userId);
   } catch (err) {
     const error = new HttpError("Could not create comment #b", 500);
     return next(error);
@@ -65,7 +65,7 @@ exports.toggleLike = async (req, res, next) => {
 
   let comment;
   try {
-    comment = Comment.findById(commentId);
+    comment = await Comment.findById(commentId);
   } catch (err) {
     const error = new HttpError("Could not perform action #a", 500);
     return next(error);
@@ -78,7 +78,7 @@ exports.toggleLike = async (req, res, next) => {
 
   let user;
   try {
-    user = User.findById(req.userId);
+    user = await User.findById(req.userId);
   } catch (err) {
     const error = new HttpError("Could not perform action #b", 500);
     return next(error);
@@ -127,7 +127,7 @@ exports.delete = async (req, res, next) => {
 
   let comment;
   try {
-    comment = Comment.findById(commentId);
+    comment = await Comment.findById(commentId);
   } catch (err) {
     const error = new HttpError("Could not delte comment #a", 500);
     return next(error);
@@ -140,7 +140,7 @@ exports.delete = async (req, res, next) => {
 
   let user;
   try {
-    user = User.findById(req.userId);
+    user = await User.findById(req.userId);
   } catch (err) {
     const error = new HttpError("Could not delete comment #b", 500);
     return next(error);
@@ -153,7 +153,7 @@ exports.delete = async (req, res, next) => {
 
   let post;
   try {
-    post = Post.findById(comment.post);
+    post = await Post.findById(comment.post);
   } catch (err) {
     const error = new HttpError("Could not delete comment #c", 500);
     return next(error);

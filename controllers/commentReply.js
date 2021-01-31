@@ -8,7 +8,7 @@ exports.create = async (req, res, next) => {
 
   let parentComment;
   try {
-    parentComment = Comment.findById(comment);
+    parentComment = await Comment.findById(comment);
   } catch (err) {
     const error = new HttpError("Could not create comment #a", 500);
     return next(error);
@@ -21,7 +21,7 @@ exports.create = async (req, res, next) => {
 
   let creator;
   try {
-    creator = User.findById(req.userId);
+    creator = await User.findById(req.userId);
   } catch (err) {
     const error = new HttpError("Could not create comment #b", 500);
     return next(error);
@@ -65,7 +65,7 @@ exports.toggleLike = async (req, res, next) => {
 
   let commentReply;
   try {
-    commentReply = CommentReply.findById(commentId);
+    commentReply = await CommentReply.findById(commentId);
   } catch (err) {
     const error = new HttpError("Could not perform action #a", 500);
     return next(error);
@@ -78,7 +78,7 @@ exports.toggleLike = async (req, res, next) => {
 
   let user;
   try {
-    user = User.findById(req.userId);
+    user = await User.findById(req.userId);
   } catch (err) {
     const error = new HttpError("Could not perform action #b", 500);
     return next(error);
@@ -127,7 +127,7 @@ exports.delete = async (req, res, next) => {
 
   let commentReply;
   try {
-    commentReply = CommentReply.findById(commentId);
+    commentReply = await CommentReply.findById(commentId);
   } catch (err) {
     const error = new HttpError("Could not delete comment #a", 500);
     return next(error);
@@ -140,7 +140,7 @@ exports.delete = async (req, res, next) => {
 
   let user;
   try {
-    user = User.findById(req.userId);
+    user = await User.findById(req.userId);
   } catch (err) {
     const error = new HttpError("Could not delete comment #b", 500);
     return next(error);
@@ -153,7 +153,7 @@ exports.delete = async (req, res, next) => {
 
   let comment;
   try {
-    comment = Comment.findById(commentReply.parentComment);
+    comment = await Comment.findById(commentReply.parentComment);
   } catch (err) {
     const error = new HttpError("Could not delete comment #c", 500);
     return next(error);

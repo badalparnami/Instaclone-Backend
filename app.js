@@ -37,7 +37,8 @@ app.use("/api/comment", commentRoutes);
 app.use("/api/commentreply", commentReplyRoutes);
 
 app.use((error, req, res, next) => {
-  res.status(error.code || error.status_code || 500);
+  const status = error.code || error.status_code || err.status || 500;
+  res.status(status);
   res.json({ message: error.message || "Something went wrong" });
 });
 
