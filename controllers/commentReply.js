@@ -8,7 +8,7 @@ exports.create = async (req, res, next) => {
 
   let parentComment;
   try {
-    parentComment = await Comment.findById(comment);
+    parentComment = await Comment.findById(comment).populate("post");
   } catch (err) {
     const error = new HttpError("Could not create comment #a", 500);
     return next(error);
@@ -16,6 +16,11 @@ exports.create = async (req, res, next) => {
 
   if (!parentComment) {
     const error = new HttpError("Could not found parent comment", 404);
+    return next(error);
+  }
+
+  if (!parentComment.post.allowComment) {
+    const error = new HttpError("Comments not allowed", 422);
     return next(error);
   }
 
@@ -27,7 +32,7 @@ exports.create = async (req, res, next) => {
     return next(error);
   }
 
-  let isBlocked = creator.blocked.find((b) => b === post.creator);
+  let isBlocked = creator.blocked.find((b) => b == comment.creator);
 
   if (isBlocked) {
     const error = new HttpError(
@@ -37,7 +42,7 @@ exports.create = async (req, res, next) => {
     return next(error);
   }
 
-  isBlocked = creator.blockedby.find((b) => b === post.creator);
+  isBlocked = creator.blockedby.find((b) => b == comment.creator);
 
   if (isBlocked) {
     const error = new HttpError(
@@ -58,6 +63,12 @@ exports.create = async (req, res, next) => {
     const error = new HttpError("Could not create comment #c", 500);
     return next(error);
   }
+
+  res.status(201).json({
+    id: commentReply.id,
+    text: commentReply.text,
+    date: commentReply.date,
+  });
 };
 
 exports.toggleLike = async (req, res, next) => {
@@ -84,12 +95,12 @@ exports.toggleLike = async (req, res, next) => {
     return next(error);
   }
 
-  const isAlreadyLiked = commentReply.like.find((cl) => cl === user);
+  const isAlreadyLiked = commentReply.like.find((cl) => cl == user.id);
 
   if (isAlreadyLiked) {
-    commentReply.like = commentReply.like.filter((cl) => cl !== user);
+    commentReply.like = commentReply.like.filter((cl) => cl != user.id);
   } else {
-    let isBlocked = user.blocked.find((b) => b === comment.creator);
+    let isBlocked = user.blocked.find((b) => b == commentReply.creator);
 
     if (isBlocked) {
       const error = new HttpError(
@@ -99,7 +110,7 @@ exports.toggleLike = async (req, res, next) => {
       return next(error);
     }
 
-    isBlocked = user.blockedby.find((b) => b === comment.creator);
+    isBlocked = user.blockedby.find((b) => b == commentReply.creator);
 
     if (isBlocked) {
       const error = new HttpError(
@@ -146,7 +157,7 @@ exports.delete = async (req, res, next) => {
     return next(error);
   }
 
-  if (commentReply.creator !== user) {
+  if (commentReply.creator != user.id) {
     const error = new HttpError("Not authorized to delete comment", 401);
     return next(error);
   }
@@ -159,7 +170,7 @@ exports.delete = async (req, res, next) => {
     return next(error);
   }
 
-  comment.reply = comment.reply.filter((cr) => cr !== commentReply);
+  comment.reply = comment.reply.filter((cr) => cr != commentReply.id);
 
   try {
     await CommentReply.findByIdAndDelete(commentId);
@@ -168,4 +179,6 @@ exports.delete = async (req, res, next) => {
     const error = new HttpError("Could not delete comment #d", 500);
     return next(error);
   }
+
+  res.status(201).json({ message: "success" });
 };

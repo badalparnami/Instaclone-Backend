@@ -7,6 +7,7 @@ const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
 const commentRoutes = require("./routes/comment");
 const commentReplyRoutes = require("./routes/commentReply");
+const hashTagRoutes = require("./routes/hashTag");
 
 const PORT = process.env.PORT || 8080;
 
@@ -35,6 +36,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/commentreply", commentReplyRoutes);
+app.use("/api/hashtag", hashTagRoutes);
 
 app.use((error, req, res, next) => {
   const status = error.code || error.status_code || err.status || 500;

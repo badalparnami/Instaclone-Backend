@@ -11,6 +11,12 @@ router.post("/togglelike", isAuth, commentControllers.toggleLike);
 
 router.delete("/delete", isAuth, commentControllers.delete);
 
-// router.get("/comments", optionalAuth, commentControllers.get);
+router.get("/get/:id/:skip", optionalAuth, commentControllers.getComments);
+
+router.get(
+  "/comments/:id/:skip",
+  optionalAuth,
+  commentControllers.getCommentReplies
+);
 
 module.exports = router;
