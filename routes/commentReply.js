@@ -4,7 +4,7 @@ const router = express.Router();
 const commentReplyControllers = require("../controllers/commentReply");
 const isAuth = require("../middleware/is-auth");
 
-router.post("/create", isAuth, commentReplyControllers.create);
+router.post("/create", isAuth, commentReplyControllers.create2);
 
 router.post("/togglelike", isAuth, commentReplyControllers.toggleLike);
 

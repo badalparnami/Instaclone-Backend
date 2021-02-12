@@ -4,6 +4,6 @@ const router = express.Router();
 const hashTagControllers = require("../controllers/hashTag");
 const optionalAuth = require("../middleware/optional-auth");
 
-router.get("/:tag/:skip", optionalAuth, hashTagControllers.getPost);
+router.get("/:tag/:skip", optionalAuth, hashTagControllers.getPost2);
 
 module.exports = router;
