@@ -9,7 +9,7 @@
     "server": "nodemon app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Badal Parnami",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^2.0.7"
